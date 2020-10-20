@@ -1,5 +1,5 @@
 const toValidDateOfBirth = param => {
-	if (param.length !== 10 || (param[2] != param[5] || param[2] != "/")) {
+	if (!param || param.length !== 10 || (param[2] != param[5] || param[2] != "/")) {
 		return null;
 	}
 	const day = parseInt(param.substring(0, 2));
@@ -28,11 +28,19 @@ const resizeFunction = () => {
 	birthDate.setMonth(dateOfBirth[1], dateOfBirth[0]);
 	const deathDate = new Date(birthDate.getTime());
 	deathDate.setYear(dateOfBirth[2] + lifeExpectancy);
+	const today = new Date();
 
-	const totalTime = deathDate.getTime() - birthDate.getTime();
-	const totalTimeInDays = totalTime / (1000 * 3600 * 24);
+	const msToWeeks = ms => ms / (1000 * 3600 * 24 * 7);
+	const weeksTotal = msToWeeks(deathDate.getTime() - birthDate.getTime());
+	const weeksPassed = msToWeeks(today.getTime() - birthDate.getTime());
 
-	// TODO: display time stuff
+	renderer.clearRect(0, 0, canvas.width, canvas.height);
+
+	let weeksDrawn = 0;
+	for (let yearsSinceBirth = 0; yearsSinceBirth < Math.ceil(weeksTotal / 52); yearsSinceBirth++) {
+		// TODO: draw either 52 squares in a row or draw weeksTotal - weeksDrawn boxes depending on which is smaller and add that to weeksDrawn
+		// TODO: fill in boxes depending on how much time has passed
+	}
 };
 window.onresize = resizeFunction;
 
