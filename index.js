@@ -71,4 +71,10 @@ window.onresize = main;
 
 window.onload = main;
 
-//TODO: maybe add some sort of timer to call main at the start of each new day
+const tomorrow = new Date();
+tomorrow.setHours(0, 0, 0, 0);
+tomorrow.setDate(tomorrow.getDate() + 1);
+window.setTimeout(() => {
+	main();
+	window.setInterval(main, 24 * 60 * 60 * 1000);
+}, tomorrow.getTime() - (new Date()).getTime());
