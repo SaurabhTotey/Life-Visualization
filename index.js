@@ -35,13 +35,27 @@ const resizeFunction = () => {
 	const weeksPassed = msToWeeks(today.getTime() - birthDate.getTime());
 
 	renderer.clearRect(0, 0, canvas.width, canvas.height);
+	const squareSize = Math.min(canvas.width / 52, canvas.height / Math.ceil(weeksTotal / 52));
+	const padding = 1;
 
 	let weeksDrawn = 0;
+	let weeksPassedToStillDraw = weeksPassed;
 	for (let yearsSinceBirth = 0; yearsSinceBirth < Math.ceil(weeksTotal / 52); yearsSinceBirth++) {
-		// TODO: draw either 52 squares in a row or draw weeksTotal - weeksDrawn boxes depending on which is smaller and add that to weeksDrawn
-		// TODO: fill in boxes depending on how much time has passed
+		const y = squareSize * yearsSinceBirth;
+		const squaresToDraw = Math.min(weeksTotal - weeksDrawn, 52);
+		for (i = 0; i < squaresToDraw; i++) {
+			const x = squareSize * i;
+			renderer.strokeRect(x + padding, y + padding, squareSize - padding, squareSize - padding);
+			if (weeksPassedToStillDraw > 0) {
+				renderer.fillRect(x + padding, y + padding, squareSize - padding, squareSize - padding); //TODO: change this to an X later
+				weeksPassedToStillDraw -= 1;
+			}
+		}
+		weeksDrawn += squaresToDraw;
 	}
 };
 window.onresize = resizeFunction;
 
 window.onload = resizeFunction;
+
+//TODO: maybe add some sort of timer to call resizeFunction at the start of each new day
