@@ -36,7 +36,7 @@ const resizeFunction = () => {
 
 	renderer.clearRect(0, 0, canvas.width, canvas.height);
 	const squareSize = Math.min(canvas.width / 52, canvas.height / Math.ceil(weeksTotal / 52));
-	const padding = 1;
+	const padding = squareSize / 10;
 
 	let weeksDrawn = 0;
 	let weeksPassedToStillDraw = weeksPassed;
@@ -45,9 +45,16 @@ const resizeFunction = () => {
 		const squaresToDraw = Math.min(weeksTotal - weeksDrawn, 52);
 		for (i = 0; i < squaresToDraw; i++) {
 			const x = squareSize * i;
-			renderer.strokeRect(x + padding, y + padding, squareSize - padding, squareSize - padding);
+			renderer.strokeRect(x + padding, y + padding, squareSize - 2 * padding, squareSize - 2 * padding);
 			if (weeksPassedToStillDraw > 0) {
-				renderer.fillRect(x + padding, y + padding, squareSize - padding, squareSize - padding); //TODO: change this to an X later
+				renderer.beginPath();
+				renderer.moveTo(x, y);
+				renderer.lineTo(x + squareSize, y + squareSize);
+				renderer.stroke();
+				renderer.beginPath();
+				renderer.moveTo(x + squareSize, y);
+				renderer.lineTo(x, y + squareSize);
+				renderer.stroke();
 				weeksPassedToStillDraw -= 1;
 			}
 		}
