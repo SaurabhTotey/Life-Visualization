@@ -35,18 +35,22 @@ const main = () => {
 	const weeksPassed = msToWeeks(today.getTime() - birthDate.getTime());
 
 	renderer.clearRect(0, 0, canvas.width, canvas.height);
-	const squareSize = Math.min(canvas.width / 52, canvas.height / Math.ceil(weeksTotal / 52));
+	const numberOfRows = Math.ceil(weeksTotal / 52);
+	const squareSize = Math.min(canvas.width / 52, canvas.height / numberOfRows);
 	const padding = squareSize / 10;
 
-	// TODO: center drawing on canvas
+	const drawingWidth = squareSize * 52;
+	const drawingHeight = squareSize * numberOfRows;
+	const xOffset = (canvas.width - drawingWidth) / 2;
+	const yOffset = (canvas.height - drawingHeight) / 2;
 
 	let weeksDrawn = 0;
 	let weeksPassedToStillDraw = weeksPassed;
-	for (let yearsSinceBirth = 0; yearsSinceBirth < Math.ceil(weeksTotal / 52); yearsSinceBirth++) {
-		const y = squareSize * yearsSinceBirth;
+	for (let yearsSinceBirth = 0; yearsSinceBirth < numberOfRows; yearsSinceBirth++) {
+		const y = squareSize * yearsSinceBirth + yOffset;
 		const squaresToDraw = Math.min(weeksTotal - weeksDrawn, 52);
 		for (i = 0; i < squaresToDraw; i++) {
-			const x = squareSize * i;
+			const x = squareSize * i + xOffset;
 			renderer.strokeRect(x + padding, y + padding, squareSize - 2 * padding, squareSize - 2 * padding);
 			if (weeksPassedToStillDraw > 0) {
 				renderer.beginPath();
@@ -67,4 +71,4 @@ window.onresize = main;
 
 window.onload = main;
 
-//TODO: maybe add some sort of timer to call resizeFunction at the start of each new day
+//TODO: maybe add some sort of timer to call main at the start of each new day
